@@ -5,8 +5,8 @@
 # Site
 title: Nagisa
 subtitle: 'nagisa blog'
-description: 'nagisa blog'
-keywords: nagisa
+description: '迷子でもいい 迷子でも進め'
+keywords: 
 author: nagisa
 language: zh-CN
 timezone: 'Asia/Shanghai'
@@ -45,7 +45,8 @@ relative_link: false
 future: true
 syntax_highlighter: highlight.js
 highlight:
-  line_number: true
+  enable: true
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
@@ -96,9 +97,16 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: fluid
-
+theme: butterfly
+baidu_analytics: 40747f98f942f54057a908b846cacfd2
+runtimeshow:
+  enable: true
+  publish_date: 14/3/2025 16:09:00
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+lazyload:
+  enable: true
+  loadingImg: /img/loading.gif
