@@ -1,43 +1,34 @@
 ---
 title: Hello world
 categories: 
-  - 技术文章  # 单层级分类
-tags: [Hexo, 教程]
+  - 开站
+tags: [说明]
 date: 2025-03-14
 ---
+<div align="center">
+<h1>你好，世界！</h1>
+</div>
 
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+欢迎来到nagisa的小站！这里是一名在南京上学的苦逼自动化学生，之前总听别人说博客博客，始终没有仔细查找过博客这个东西。
 
-## Quick Start
+大学的学习是乏味的，大一大二的经历始终给我强调着这一点。很多很多时候，RCRM，电赛，各种机器人与实践项目更能让我觉得真切的进步。
 
-### Create a new post
+熬夜解决完一两个error，通宵看完一个xxx技术零基础课程，只能解决一两个工程当下眼前的阻塞。一觉睡过去，昨晚熬夜写下的代码也只剩下上帝能够理解。
 
-``` bash
-$ hexo new "My New Post"
-```
+学习，绩点，竞赛，健康，累啊。每次完赛，学期结束之后过一段时间，脑袋里，曾经的知识都荡然无存。
 
-More info: [Writing](https://hexo.io/docs/writing.html)
+只为了考试应试所学的知识，也需要被我亲手写下，帮助自己细数无数的努力，多年后帮助自己回看曾经的自己，曾经走过的路，曾经为知识留下的汗水，如果能帮到同为开发者的你，那就是更加幸运的一件事了。
 
-### Run server
+这边是我建自己的小站的初衷，给最近不想学习的我一个让我继续追逐梦想的理由，让我能看到自己一天一天的进步。
 
-``` bash
-$ hexo server
-```
+所以，还是那句在每项工科技能里第一件要借助控制单元向其整个技术宇宙发话一样。
 
-More info: [Server](https://hexo.io/docs/server.html)
+你好！世界！
 
-### Generate static files
+如果屏幕前的你有幸是因无意翻到这个网站也好，查bug时找到了我也罢，也不管你是正在为学业焦虑，还是在为生计奔波，却在我的主页里偶然读到了我的小唠叨。
 
-``` bash
-$ hexo generate
-```
+祝你，理想成真！
 
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
-
-``` bash
-$ hexo deploy
-```
-
-More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
+# 附nagisa联系方式
+- 你可以在[github](https://github.com/nagisa1201)上找到我，也可以在<a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=2964793117@qq.com" style="text-decoration:none;">QQ邮箱</a>与我交流(~~虽然我是采购~~)
+- 附qq邮箱：2964793117@qq.com
