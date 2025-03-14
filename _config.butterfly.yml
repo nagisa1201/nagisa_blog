@@ -67,8 +67,7 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
-
+favicon: /img/mygo_group.jpeg
 avatar:
   img: /img/nagisa-head.jpg
   effect: false
@@ -114,14 +113,14 @@ cover:
   archives_enable: true
   position: both # 封面展示的位置 left/right/both
   # 当没有设置cover时，默认展示的文章封面
-  # default_cover:
-  #   # 当配置多张图片时，会随机选择一张作为 cover. 此时写法为
-  #   - https:
-  #   - http:
-  #   - http:
-  #   - http:
-  #   - http:
-  #   - http:
+  default_cover:
+    # 当配置多张图片时，会随机选择一张作为 cover. 此时写法为
+    - /img/hitoshi.jpg
+    - /img/mygo.png
+    - /img/nagisa1.jpg
+    - /img/nagisa2.jpg
+    - /img/nagisa3.jpg
+
 
 
 # Replace Broken Images
