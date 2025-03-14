@@ -1,0 +1,8 @@
+# 正确示例（使用两个空格缩进）
+- class_name: 技术伙伴
+  class_desc: 技术交流站点
+  link_list:
+    - name: 示例网站
+      link: https://example.com
+      avatar: /img/avatar.png
+      descr: 优质技术资源站

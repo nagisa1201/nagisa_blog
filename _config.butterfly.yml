@@ -22,14 +22,12 @@ menu:
     分类: /categories/ || fa fa-archive
     标签: /tags/ || fa fa-tags
     归档: /archives/ || fa fa-folder-open
-  生活 || fas fa-list:
-    分享: /shuoshuo/ || fa fa-comments-o
-    相册: /photos/ || fa fa-camera-retro
-    音乐: /music/ || fa fa-music
-    影视: /movies/ || fas fa-video
-  友链: /links/ || fa fa-link
-  留言板: /comment/ || fa fa-paper-plane
-  #留言板: /messageboard/ || fa fa-paper-plane
+  # 生活 || fas fa-list:
+  #   相册: /photos || fa fa-camera-retro
+  #   音乐: /music/ || fa fa-music
+  友链: /link/ || fa fa-link
+  # 留言板: /comment/ || fa fa-paper-plane
+  留言板: /messageboard/ || fa fa-paper-plane
   关于笔者: /about/ || fas fa-heart  
 
 
@@ -76,24 +74,24 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: /img/nagisa4.jpg
 
 # The banner image of index page
 index_img: /img/kon.jpg
 
 # The banner image of archive page
-archive_img:
+archive_img: /img/nagisa4.jpg
 
 # Note: tag page, not tags page
-tag_img:
+tag_img: /img/clannad.jpg 
 
 # The banner image of tag page, you can set the banner image for each tag
 # Format:
 #  - tag name: xxxxx
-tag_per_img:
+tag_per_img: 
 
 # Note: category page, not categories page
-category_img:
+category_img: /img/mygo.png
 
 # The banner image of category page, you can set the banner image for each category
 # Format:
@@ -120,19 +118,19 @@ cover:
     - /img/nagisa1.jpg
     - /img/nagisa2.jpg
     - /img/nagisa3.jpg
-
+    - /img/nagisa4.jpg
 
 
 # Replace Broken Images
 error_img:
-  flink: /img/friend_404.gif
-  post_page: /img/404.jpg
+  flink: /img/load.jpg
+  post_page: /img/load.jpg
 
 # A simple 404 page
 error_404:
   enable: false
   subtitle: 'Page Not Found'
-  background: /img/error-page.png
+  background: /img/damie.png
 
 post_meta:
   # Home Page
@@ -529,6 +527,7 @@ share:
   # Share.js
   # https://github.com/overtrue/share.js
   sharejs:
+    enable: true
     sites: facebook,twitter,wechat,weibo,qq
 
   # AddToAny
@@ -541,18 +540,15 @@ share:
 # --------------------------------------
 
 comments:
-  # Up to two comments system, the first will be shown as default
-  # Leave it empty if you don't need comments
-  # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
-  # Format of two comments system : Disqus,Waline
-  use:
-  # Display the comment name next to the button
-  text: true
-  # Lazyload: The comment system will be load when comment element enters the browser's viewport.
-  # If you set it to true, the comment count will be invalid
-  lazyload: false
+  use: # 使用的评论（请注意，填写的评论首字母需要大写。最多支持两个，如果不需要请留空）
+    - Valine
+    - Disqus
+  # - Valine
+  # - Disqus
+  text: true # 是否显示评论服务商的名字
+  lazyload: false # 是否为评论开启 lazyload，开启后，只有滚动到评论位置时才会加载评论所需要的资源（开启 lazyload 后，评论数将不显示）
+  count: false # 是否在文章顶部显示评论数 livere 和 utterances 不支持评论数显示
   # Display comment count in post's top_img
-  count: false
   # Display comment count in Home Page
   card_post_count: false
 
@@ -1163,3 +1159,6 @@ sharejs:
 addtoany:
   enable: false
   item: facebook,twitter,wechat,sina_weibo,facebook_messenger,email,copy_link
+
+custom_file_path:
+  data: source/_data
