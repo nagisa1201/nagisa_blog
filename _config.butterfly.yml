@@ -315,7 +315,7 @@ aside:
       link: https://github.com/nagisa1201
   card_announcement:
     enable: true
-    content: This is nagisa's Blog
+    content: 博主课爆多，网站还有些功能可能没来得及维护,有问题的部分还请阁下体谅QAQ
   card_recent_post:
     enable: true
     # If set 0 will show all
@@ -584,15 +584,16 @@ gitalk:
 # Valine
 # https://valine.js.org
 valine:
-  appId:
-  appKey:
-  avatar: monsterid
-  # This configuration is suitable for domestic custom domain name users, overseas version will be automatically detected (no need to manually fill in)
-  serverURLs:
-  bg:
-  # Use Valine visitor count as the page view count
-  visitor: false
-  option:
+  appId: MLne70gkLADdkk67m6dMa7BG-gzGzoHsz
+  appKey: JkBzTctPKgDT6aFsIdEsg6BR
+  avatar: retro # gravatar style https://valine.js.org/#/avatar
+  serverURLs: # This configuration is suitable for domestic custom domain name users, overseas version will be automatically detected (no need to manually fill in)
+  bg: "#F0F0F0"
+  visitor: true
+  option: 
+    lang: zh-cn
+    placeholder: "留下你的评论吧~"
+    enableQQ: true
 
 # Waline - A simple comment system with backend support fork from Valine
 # https://waline.js.org/
