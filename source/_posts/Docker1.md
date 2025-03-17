@@ -3,14 +3,14 @@ title: Docker踩坑与总结(含有ROS联合开发)
 categories: 
   - 技术
   - Docker
-tags: [技术博文，ROS1/2,SLAM]
+tags: [技术博文,ROS1/2,SLAM]
 date: 2025-03-16
 ---
-<div align="center">
-<h1>Docker踩坑与总结(含有ROS联合开发)</h1>
+<div align="center" style="font-size: 36px; font-weight: 800;">
+  Docker踩坑与总结(含有ROS联合开发)
 </div>
 
-## 1. 前言
+# 前言
 - 笔者最初是在工控机上进行ROS/ROS2的开发，吃了无数配置环境的史
 
 - ROS环境下的依赖安装与环境隔离在开发中需要在开发中实际考虑的重要一项
@@ -21,14 +21,14 @@ date: 2025-03-16
 
 - 经过一段时间的开发和踩坑，遂将一些心得体会分享出来。
 
-### 1.1 Docker的优势运用
+## Docker的优势运用
 - 隔离不同容器间的环境，不同容器可以有截然不同的环境配置和依赖（请记住容器和镜像这两个词，可以类比C++的类与实例化来理解）
 
 - 容器可以无限创建，并且理论上而言可以将一切的环境配置用镜像记录下来，一旦构建好镜像，以此生成的容器可以被任何人轻松构建，自动完成多个相同环境的容器配置
 
 - Docker的容器与宿主机（即你的主机），在容器创建开启时自动配置网络桥接（关于网络，自动化专业的笔者也不是特别的清楚，具体可以看看这篇[帖子](https://blog.csdn.net/succing/article/details/122433770)），大致可以理解成相当于宿主机和各个容器全连接到docker自己生成的虚拟交换机，然后各个容器的网络请求被docker虚拟交换机传输到宿主机，走宿主机的网络传输，这个模型中可以将宿主机看作连接容器的转发路由器。
 
-### 1.2 我们的选择
+## 我们的选择
  第三点的网络特点在同样支持局域网协议的ROS是极其有益的，但这种情况下ROS1中的Master中心化给局域网配置带来极大的不便，而ROS2同一局域网下天然支持节点相互通讯，则给前述的容器-ROS2开发带来了更多的通讯选择，笔者和同学在实际开发时也遇到过不少ROS1的局域网通信问题，我们采用的是ROS2容器-ROS1/2桥接容器的方法。
 
 | 使用内容                                               | 说明         |
@@ -37,22 +37,22 @@ date: 2025-03-16
 | ROS2 | 解决同一局域网下不同主机上的ROS2容器的通信   |
 | [ROS1-2桥接](https://github.com/TommyChangUMD/ros-humble-ros1-bridge-builder)（我们找到的github项目原始版)   | 让ROS1/2之间的话题可以互相发现
 
-## 2. Docker的基础使用
-### 2.1 下载Docker(鱼香ros一键安装)
+# Docker的基础使用
+## 下载Docker(鱼香ros一键安装)
 ```bash
 wget http://fishros.com/install -O fishros && . fishros ##然后根据终端提示项一键下载docker
 ```
 
-### 2.2 你需要构建/拉取一个镜像
-2.2.1 从[DockerHub](https://hub.docker.com/)开源镜像网站拉取镜像（需要科学上网）
+## 你需要构建/拉取一个镜像
+### 从[DockerHub](https://hub.docker.com/)开源镜像网站拉取镜像（需要科学上网）
 ```bash
 docker pull 镜像名/Tags(在官网查看)
 ```
-2.2.2 自己构建镜像
+### 自己构建镜像
 - 同样需要先拉取一个镜像作为基础镜像
 - 将这个基础镜像在你的Dockerfile以FROM xxx（image）的格式，以该镜像作为基础镜像开始构建，具体的攥写这里不多赘述，如果是着急使用可以修改一下他人已经攥写好的Dockerfile，格式大差不差
 
-### 2.3 管理镜像
+## 管理镜像
 可以通过docker-compose工具来管理镜像
 - 这个工具是一个用于定义和运行多容器应用程序的工具
 - 通过过 Compose，可以使用 YML 文件来配置应用程序需要的所有服务。然后，使用一个命令，就可以从 YML 文件配置中创建并启动所有服务
@@ -65,8 +65,8 @@ Compose 使用的三个步骤：
 sudo apt install docker-compose 
 ```
 
-## 3. 重点解析：Dockerfile和docker-compose.yml文件的语法和文件结构
-### 3.1 文件结构
+# 重点解析：Dockerfile和docker-compose.yml文件的语法和文件结构
+## 文件结构
 - 附笔者某github的docker仓库结构
 ```text
 .
@@ -92,7 +92,7 @@ sudo apt install docker-compose
 - 文件结构最好与笔者保持一致(如果是docker-compose管理)
 - 两个容器重要文件存放在.devcontainer下的原因是如果使用vscode的dev container扩展项，必须要求文件夹名为.devcontainer，在其中加入vscode的指定格式.json可以方便的配置容器内vscode,编辑容器内文件（此处没有添加，感兴趣可以去搜一艘）
 
-### 3.2 Dockerfile语法格式常用
+## Dockerfile语法格式常用
 - 此处粘贴一篇笔者Dockerfile文件，根据注释可以了解到笔者对每条语法指令的观点（如果要直接使用请删除笔者某些注释）
 ```bash
 # 指定基础镜像，以此为基础镜像来构建容器
@@ -195,7 +195,7 @@ COPY [源路径] [目标路径]
 
 - ADD：与COPY 一样，只能复制构建上下文内的文件（不会访问宿主机任意路径），但可以复制自动解压 .tar 压缩包（COPY 不会自动解压）
 
-### 3.3 docker-compose.yml文件的语法格式
+## docker-compose.yml文件的语法格式
 - 同附docker-compose.yml文件
  ```bash
  version: '3' ## 指定 Docker Compose 文件格式版本
