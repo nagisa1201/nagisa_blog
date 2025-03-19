@@ -3,7 +3,7 @@ title: Docker踩坑与总结(含有ROS联合开发)
 categories: 
   - 技术
   - Docker
-tags: [技术博文,ROS1/2,SLAM,Docker]
+tags: [技术博文,ROS1/2,SLAM]
 date: 2025-03-16
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
