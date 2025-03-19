@@ -1,28 +1,45 @@
 ---
-title: Docker踩坑与总结(含有ROS联合开发)
+title: SLAM部署与imu标定
 categories: 
   - 技术
-  - Docker
+  - SLAM
 tags: [技术博文,ROS1/2,SLAM]
-date: 2025-03-16
+date: 2025-03-19
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
-  Docker踩坑与总结(含有ROS联合开发)
+  SLAM部署与imu标定
 </div>
 
 # 前言
-- 笔者最初是在工控机上进行ROS/ROS2的开发，吃了无数配置环境的史
+- 笔者在[上一条帖子](https://tlf-nagisa-blog.com/2025/03/15/docker1/)时已经在尝试运行若干SLAM算法试图择优观察部署效果
+(包括[FAST_LIO](https://github.com/hku-mars/FAST_LIO)，[LIO-SAM](https://github.com/TixiaoShan/LIO-SAM)，[Point-LIO](https://github.com/hku-mars/Point-LIO)，[rtabmap](https://github.com/introlab/rtabmap)等笔者看过的建图，定位算法）
 
-- ROS环境下的依赖安装与环境隔离在开发中需要在开发中实际考虑的重要一项
+- 笔者最终聚焦在[LIO-SAM](https://github.com/TixiaoShan/LIO-SAM)的建图(意即先导地图的获取)，随后利用[liorf_localization](https://github.com/YJZLuckyBoy/liorf_localization)的[LIO-SAM](https://github.com/TixiaoShan/LIO-SAM)衍生纯定位算法实现机器人在已知地图的重定位
 
-- 并且在以几大实验室开源的Star数极多的github有关SLAM项目(包括[FAST_LIO](https://github.com/hku-mars/FAST_LIO)，[LIO-SAM](https://github.com/TixiaoShan/LIO-SAM)，[Point-LIO](https://github.com/hku-mars/Point-LIO)，[rtabmap](https://github.com/introlab/rtabmap)等笔者看过的建图，定位算法），其环境配置ROS1/2参差不齐，在同台宿主机上反复的重新配置ROS1和2的环境极其繁琐
+- 可能有的开发者想问SLAM已经自带了同时建图与定位功能，为什么还要将建图和定位隔开进行开发。笔者在单跑LIO-SAM时发现过其轨迹与实际录取数据包时的误差，有时甚至会平地起飞（漂移）
 
-- 在工作室同学的推荐下，接触到了Docker开发容器，发现其是解决这一环境配置问题和环境隔离问题的好东西
+此处插入图片
 
-- 经过一段时间的开发和踩坑，遂将一些心得体会分享出来。
+- 为了解决这一问题，笔者尝试了隔离建图定位，进行imu内参标定的尝试，将其记录下来(~~其实就是臭掉包工程师~~)
 
-## Docker的优势运用
-- 隔离不同容器间的环境，不同容器可以有截然不同的环境配置和依赖（请记住容器和镜像这两个词，可以类比C++的类与实例化来理解）
+# 基础知识扫盲
+首先，我们要了解一下SLAM和传感器的有关术语
+
+## SLAM，定位与建图
+- 建图：简而言之，就是收集正在运作的传感器数据（本文中提到的均为激光SLAM，所以传感器基本上是激光雷达+imu），利用建图算法将这段时间的传感器数据记录为一张地图  
+
+- 定位：实际上就是确定机器人从规定的地图原点（通常也是机器人的上电原点），到机器人任何一时刻运行时刻的位置改变，确定这个改变也就是给机器人定位了
+
+- 或者，有了解过tf树的同学也可以通过几大坐标系更轻松的理解。map：地图原点；odom：机器人上电原点，里程计的初始点；base_link：机器人在运行过程中的任意一点，定位，就是时刻刷新odom到base_link的tf树变化
+
+- SLAM（同时建图与定位）：能够依靠高计算量算法，做到机器人首次在新环境中同时完成前两项的工作
+
+- 需要注意的是，前面的三个概念，在实际运行的时候所需的数据资源一模一样，除了定位需要多用到一个建图结束生成的先导地图，三者均只需要提供雷达和imu数据即可。
+
+## SLAM的分类
+
+# 跑通SLAM的流程
+- 
 
 - 容器可以无限创建，并且理论上而言可以将一切的环境配置用镜像记录下来，一旦构建好镜像，以此生成的容器可以被任何人轻松构建，自动完成多个相同环境的容器配置
 
