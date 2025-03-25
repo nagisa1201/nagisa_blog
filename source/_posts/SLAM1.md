@@ -107,10 +107,12 @@ date: 2025-03-19
 lio_sam:
 
   # Topics
-  pointCloudTopic: "points_raw"   # Point cloud data 
-  imuTopic: "imu_raw"             # IMU data
-  odomTopic: "odometry/imu"       # 这个是imu数据经过处理，代码自动发布的，IMU pre-preintegration odometry, same frequency as IMU
-  gpsTopic: "odometry/gpsz"       # 若要使用GPS，GPS发布的话题odometry topic from navsat, see module_navsat.launch file
+  pointCloudTopic: "points_raw" # Point cloud data 
+  imuTopic: "imu_raw"  # IMU data
+  odomTopic: "odometry/imu" # 这个是imu数据经过处理，代码自动发布的，
+  #IMU pre-preintegration odometry, same frequency as IMU
+  gpsTopic: "odometry/gpsz" # 若要使用GPS，GPS发布的话题
+  #odometry topic from navsat, see module_navsat.launch file
 
   # Frames tf树形态
   lidarFrame: "base_link"
@@ -119,22 +121,34 @@ lio_sam:
   mapFrame: "map"
 
   # GPS Settings
-  useImuHeadingInitialization: true   # 是否使用IMU的航向角（偏航角）​来初始化系统的初始方向，但需要九轴IMU，if using GPS data, set to "true"
-  useGpsElevation: false              # if GPS elevation is bad, set to "false" 是否使用GPS的高度数据作为定位的垂直方向（Z轴）输入
-  gpsCovThreshold: 2.0                # m^2, threshold for using GPS data GPS数据协方差的阈值（单位：平方米），用于判断当前GPS数据是否可靠，若大于该数值则认为数据不可靠，不会使用gps数据
-  poseCovThreshold: 25.0              # m^2, threshold for using GPS data 系统当前位姿估计的协方差阈值（单位：平方米），用于判断是否触发GPS修正
+  useImuHeadingInitialization: true # 是否使用IMU的航向角（偏航角）​来初始化系统的初始方向，
+  #但需要九轴IMU，if using GPS data, set to "true"
+  useGpsElevation: false  # if GPS elevation is bad, set to "false" 
+  #是否使用GPS的高度数据作为定位的垂直方向（Z轴）输入
+  gpsCovThreshold: 2.0    # m^2, threshold for using GPS data 
+  #GPS数据协方差的阈值（单位：平方米），用于判断当前GPS数据是否可靠，若大于该数值则认为数据不可靠，不会使用gps数据
+  poseCovThreshold: 25.0  # m^2, threshold for using GPS data 
+  #系统当前位姿估计的协方差阈值（单位：平方米），用于判断是否触发GPS修正
   
   # Export settings
-  savePCD: false                              # https://github.com/TixiaoShan/LIO-SAM/issues/3
-  savePCDDirectory: "/Downloads/LOAM/"        # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation 将建图结果先导地图保留路径，程序结束或ctrl+c后自动触发保存
+  savePCD: false  # https://github.com/TixiaoShan/LIO-SAM/issues/3
+  savePCDDirectory: "/Downloads/LOAM/" # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation 
+  #将建图结果先导地图保留路径，程序结束或ctrl+c后自动触发保存
   
   # Sensor Settings
-  sensor: velodyne                            # lidar sensor type, 'velodyne' or 'ouster' or 'livox' 源码中有数据之间的转换，这几种雷达会有不一样的传感器点云数据构成
-  N_SCAN: 16                                  # number of lidar channel (i.e., Velodyne/Ouster: 16, 32, 64, 128, Livox Horizon: 6)
-  Horizon_SCAN: 1800                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048, Livox Horizon: 4000)激光雷达的水平分辨率（每圈扫描的水平点数），决定点云的列数
-  downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1 点云下采样率，降低数据量以提升处理速度
-  lidarMinRange: 1.0                          # default: 1.0, minimum lidar range to be used
-  lidarMaxRange: 1000.0                       # default: 1000.0, maximum lidar range to be used 采集雷达数据的视在有效范围，采集数据的简单滤波
+  sensor: velodyne # lidar sensor type, 'velodyne' or 'ouster' or 'livox' 
+  #源码中有数据之间的转换，这几种雷达会有不一样的传感器点云数据构成
+  N_SCAN: 16  # number of lidar channel (i.e., Velodyne/Ouster: 16, 32, 64, 128, Livox Horizon: 6)
+  Horizon_SCAN: 1800  # lidar horizontal resolution 
+  #(Velodyne:1800, Ouster:512,1024,2048, Livox Horizon: 4000)
+  #激光雷达的水平分辨率（每圈扫描的水平点数），决定点云的列数
+  downsampleRate: 1  # default: 1. 
+  #Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1 
+  #点云下采样率，降低数据量以提升处理速度
+  lidarMinRange: 1.0 # default: 1.0, minimum lidar range to be used
+  lidarMaxRange: 1000.0 # default: 1000.0, 
+  #maximum lidar range to be used 
+  #采集雷达数据的视在有效范围，采集数据的简单滤波
 
   # IMU Settings
   imuAccNoise: 3.9939570888238808e-03  # IMU的加速度计测量噪声
@@ -145,13 +159,13 @@ lio_sam:
   imuRPYWeight: 0.01   # IMU姿态（Roll、Pitch、Yaw）在多传感器融合中的权重，表示对IMU的信任程度，越高越信任
 
   # Extrinsics: T_lb (lidar -> imu) 传感器外参的标定矩阵
-  extrinsicTrans: [0.0, 0.0, 0.0]    # 平移矩阵：雷达坐标系 到 ​IMU坐标系 的 ​原点偏移量
+  extrinsicTrans: [0.0, 0.0, 0.0]  # 平移矩阵：雷达坐标系 到 ​IMU坐标系 的 ​原点偏移量
   extrinsicRot: [-1, 0, 0,
                   0, 1, 0,
-                  0, 0, -1]          # 旋转矩阵：定义从 ​雷达坐标系 到 ​IMU坐标系 的 ​旋转变换
+                  0, 0, -1]  # 旋转矩阵：定义从 ​雷达坐标系 到 ​IMU坐标系 的 ​旋转变换
   extrinsicRPY: [0, -1, 0,
                  1, 0, 0,
-                 0, 0, 1]            # 通过欧拉角旋转矩阵（滚转、俯仰、偏航）描述 ​雷达→IMU 的旋转变换，并以矩阵形式存储和extrinsicRot其实存储的信息一致
+                 0, 0, 1]  # 通过欧拉角旋转矩阵（滚转、俯仰、偏航）描述 ​雷达→IMU 的旋转变换，并以矩阵形式存储和extrinsicRot其实存储的信息一致
   # extrinsicRot: [1, 0, 0,
   #                 0, 1, 0,
   #                 0, 0, 1]
@@ -160,43 +174,69 @@ lio_sam:
   #                 0, 0, 1]
 
   # LOAM feature threshold
-  edgeThreshold: 1.0     # 边缘特征曲率阈值，用于判断一个点是否属于边缘特征
-  surfThreshold: 0.1     # 平面特征曲率阈值，用于筛选平坦区域的特征点
-  edgeFeatureMinValidNum: 10   # 单帧点云中边缘特征的最小有效数量  ​动态场景​（如行人密集）：增加该值（如 20），确保足够特征点匹配。​低线数雷达​（如16线）：减少该值（如 5），避免频繁丢帧
-  surfFeatureMinValidNum: 100  # ​单帧点云中平面特征的最小有效数量  ​大范围场景​（如高速公路）：提高该值（如 150），增强匹配鲁棒性。​狭窄场景​（如走廊）：降低该值（如 50），避免因平面点不足导致匹配失败
+  edgeThreshold: 1.0  # 边缘特征曲率阈值，用于判断一个点是否属于边缘特征
+  surfThreshold: 0.1  # 平面特征曲率阈值，用于筛选平坦区域的特征点
+  edgeFeatureMinValidNum: 10   # 单帧点云中边缘特征的最小有效数量  
+  #​动态场景​（如行人密集）：增加该值（如 20），确保足够特征点匹配。
+  #​低线数雷达​（如16线）：减少该值（如 5），避免频繁丢帧
+  surfFeatureMinValidNum: 100  # ​单帧点云中平面特征的最小有效数量  
+  #​大范围场景​（如高速公路）：提高该值（如 150），增强匹配鲁棒性。
+  #​狭窄场景​（如走廊）：降低该值（如 50），避免因平面点不足导致匹配失败
 
   # voxel filter paprams 值相当于定义体素大小，点云被划分成正方体，值越小越精细
-  odometrySurfLeafSize: 0.4                     # default: 0.4 - outdoor, 0.2 - indoor控制里程计（Odometry）模块中表面（Surf）点云的下采样体素大小。​数值含义：体素边长为 0.4 米，即点云会被划分为 0.4m × 0.4m × 0.4m 的立方体，每个立方体内的点用一个代表点（如重心）替代
-  mappingCornerLeafSize: 0.2                    # default: 0.2 - outdoor, 0.1 - indoor控制建图（Mapping）模块中表面（Surf）点云的下采样体素大小
-  mappingSurfLeafSize: 0.4                      # default: 0.4 - outdoor, 0.2 - indoor
+  odometrySurfLeafSize: 0.4  # default: 0.4 - outdoor, 0.2 - indoor
+  #控制里程计（Odometry）模块中表面（Surf）点云的下采样体素大小。
+  #​数值含义：体素边长为 0.4 米，即点云会被划分为 0.4m 的立方体，每个立方体内的点用一个代表点（如重心）替代
+  mappingCornerLeafSize: 0.2 # default: 0.2 - outdoor, 0.1 - 
+  #indoor控制建图（Mapping）模块中表面（Surf）点云的下采样体素大小
+  mappingSurfLeafSize: 0.4   # default: 0.4 - outdoor, 0.2 - indoor
 
   # robot motion constraint (in case you are using a 2D robot)
-  z_tollerance: 1000                            # meters 控制机器人的两帧之间z轴位移大小，当值为很大时就是完全不限定，为0时强制其在一平面上运动，但当确实有z轴微小偏移却强行设0会引发漂移
-  rotation_tollerance: 1000                     # radians 控制机器人的两帧之间的转动最大角（弧度单位）
+  z_tollerance: 1000         # meters 控制机器人的两帧之间z轴位移大小，当值为很大时就是完全不限定
+  #为0时强制其在一平面上运动，但当确实有z轴微小偏移却强行设0会引发漂移
+  rotation_tollerance: 1000  # radians 控制机器人的两帧之间的转动最大角（弧度单位）
 
   # CPU Params
-  numberOfCores: 4                              # number of cores for mapping optimization 指定用于建图优化（Mapping Optimization）的CPU核心数为4
-  mappingProcessInterval: 0.15                  # seconds, regulate mapping frequency 建图进程的执行间隔为0.15秒（即每秒约6.6次更新
+  numberOfCores: 4  # number of cores for mapping optimization 
+  #指定用于建图优化（Mapping Optimization）的CPU核心数为4
+  mappingProcessInterval: 0.15 # seconds, regulate mapping frequency 
+  #建图进程的执行间隔为0.15秒（即每秒约6.6次更新
 
   # Surrounding map
-  surroundingkeyframeAddingDistThreshold: 1.0   # meters, regulate keyframe adding threshold 设置关键帧添加的距离阈值
-  surroundingkeyframeAddingAngleThreshold: 0.2  # radians, regulate keyframe adding threshold 设置关键帧添加的角度阈值
-  surroundingKeyframeDensity: 2.0               # meters, downsample surrounding keyframe poses  控制周围关键帧的下采样密度，越多越准，但cpu负荷更大
-  surroundingKeyframeSearchRadius: 50.0         # meters, within n meters scan-to-map optimization (when loop closure disabled) 设置局部地图优化的搜索半径
+  surroundingkeyframeAddingDistThreshold: 1.0  # meters, regulate keyframe adding threshold 
+  #设置关键帧添加的距离阈值
+  surroundingkeyframeAddingAngleThreshold: 0.2 # radians, regulate keyframe adding threshold 
+  #设置关键帧添加的角度阈值
+  surroundingKeyframeDensity: 2.0 # meters, downsample surrounding keyframe poses  
+  #控制周围关键帧的下采样密度，越多越准，但cpu负荷更大
+  surroundingKeyframeSearchRadius: 50.0 # meters, within n meters scan-to-map optimization (when loop closure disabled) 
+  #设置局部地图优化的搜索半径
 
   # Loop closure
   loopClosureEnableFlag: true
-  loopClosureFrequency: 1.0                     # Hz, regulate loop closure constraint add frequency
-  surroundingKeyframeSize: 50                   # submap size (when loop closure enabled) 定义用于构建局部子地图（Submap）的关键帧数量
-  historyKeyframeSearchRadius: 15.0             # meters, key frame that is within n meters from current pose will be considerd for loop closure 设定搜索历史关键帧的空间半径（狭窄环境要减小，防止误匹配）
-  historyKeyframeSearchTimeDiff: 30.0           # seconds, key frame that is n seconds older will be considered for loop closure 设置历史关键帧的时间差阈值（高速机器人减少，低速增长）
-  historyKeyframeSearchNum: 25                  # number of hostory key frames will be fused into a submap for loop closure 指定融合到子地图中的历史关键帧数量（低的实时性好，高的鲁棒性强）
-  historyKeyframeFitnessScore: 0.3              # icp threshold, the smaller the better alignment 设定ICP（迭代最近点）匹配的误差阈值，数值越小匹配越精准
+  loopClosureFrequency: 1.0    # Hz, regulate loop closure constraint add frequency
+  surroundingKeyframeSize: 50  # submap size (when loop closure enabled) 
+  #定义用于构建局部子地图（Submap）的关键帧数量
+  historyKeyframeSearchRadius: 15.0  # meters, key frame that is within n meters from current pose will be considerd for loop closure 
+  #设定搜索历史关键帧的空间半径（狭窄环境要减小，防止误匹配）
+  historyKeyframeSearchTimeDiff: 30.0  # seconds, key frame that is n seconds older will be considered for loop closure 
+  #设置历史关键帧的时间差阈值（高速机器人减少，低速增长）
+  historyKeyframeSearchNum: 25  # number of hostory key frames will be fused into a submap for loop closure 
+  #指定融合到子地图中的历史关键帧数量（低的实时性好，高的鲁棒性强）
+  historyKeyframeFitnessScore: 0.3  # icp threshold, the smaller the better alignment 
+  #设定ICP（迭代最近点）匹配的误差阈值，数值越小匹配越精准
 
   # Visualization
-  globalMapVisualizationSearchRadius: 1000.0    # meters, global map visualization radius 设置全局地图可视化的搜索半径（单位：米），即仅显示机器人当前位姿周围 ​1000 米范围内 的地图数据 大范围建图​（如户外）：保持默认值，确保全局地图完整显示。​实时避障：可缩小范围（如 500.0），减少渲染数据量以提升帧率。
-  globalMapVisualizationPoseDensity: 10.0       # meters, global map visualization keyframe density 高精度调试：设为较小值（如 5.0），显示更多关键帧轨迹细节。​轻量化显示：增大值（如 20.0），减少轨迹点数量以降低GPU负载。
-  globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density 设置全局地图点云的 ​下采样体素尺寸​（单位：米），即每个 1.0×1.0×1.0 米体素内保留一个点 ​降低点云冗余：减少重复点（如墙面、地面），提升渲染效率。​保持特征结构：合理值（如 0.5-2.0）可在降噪与保留几何细节间平衡。
+  globalMapVisualizationSearchRadius: 1000.0 # meters, global map visualization radius 
+  #设置全局地图可视化的搜索半径（单位：米），即仅显示机器人当前位姿周围 ​1000 米范围内 的地图数据 
+  #大范围建图​（如户外）：保持默认值，确保全局地图完整显示。
+  #​实时避障：可缩小范围（如 500.0），减少渲染数据量以提升帧率。
+  globalMapVisualizationPoseDensity: 10.0    # meters, global map visualization keyframe density 
+  #高精度调试：设为较小值（如 5.0），显示更多关键帧轨迹细节。
+  #​轻量化显示：增大值（如 20.0），减少轨迹点数量以降低GPU负载。
+  globalMapVisualizationLeafSize: 1.0        # meters, global map visualization cloud density 
+  #设置全局地图点云的 ​下采样体素尺寸​（单位：米），即每个 1.0×1.0×1.0 米体素内保留一个点 
+  #​降低点云冗余：减少重复点（如墙面、地面），提升渲染效率。​保持特征结构：合理值（如 0.5-2.0）可在降噪与保留几何细节间平衡。
 
 
 
