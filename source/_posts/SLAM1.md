@@ -93,13 +93,16 @@ date: 2025-03-19
 ## 概述：仅仅只是单论跑起来的步骤很简单
 - 首先写好各个硬件的驱动模块，让所有传感器开始工作，并发布要求的话题，并在话题中发布传感器数据（IMU和Lidar传感器驱动，对于Mid360用户而言，这个激光雷达中自带了一个精度还行的IMU所以只需要一个硬件）
 
+- 然后再运用上述提到的标定包标定对应传感器的内参，得到内参标定结果，写入SLAM算法的config文件的对应传感器配置项。
+
 - 随后只需要调整SLAM原始包的参数文件，修改订阅的传感器话题和前述自己传感器发布的话题一致，并启动SLAM的launch文件，理论上而言就可以跑起来了
 
-- 但仅仅跑起来远远不够，在没有调整其他参数，如地图降采样率，传感器的噪声值（即前述标定后得到的数据），数据单位等（官方包数据和你的传感器数据单位不一定一样）。你会发现你的建图虽然正常打开了，但是机器人一开起来就去外太空旅游了，根本不是实际你采集数据时候的轨迹
+- 但仅仅跑起来远远不够，在没有调整其他参数，如地图降采样率，传感器数据置信度，数据单位等（官方包数据和你的传感器数据单位不一定一样）。你会发现你的建图虽然正常打开了，但是机器人一开起来就去外太空旅游了，根本不是实际你采集数据时候的轨迹
 
-## 重点记录：参数文件的修改
+## 重点记录1：参数文件的修改
 这也是困扰了笔者很久很久的调参环节，想要看懂yaml文件里的参数，要去回查源码和了解SLAM的部分运行原理是最好，包括算法的模块设计思路
 ### 参数详解
+- 笔者整理了大部分的lio-sam的yaml中的参数含义并添加了大段注释，知道了参数含义，才能做出正确尝试性的改参，详细看下文注释
 ```bash
 lio_sam:
 
@@ -142,13 +145,13 @@ lio_sam:
   imuRPYWeight: 0.01   # IMU姿态（Roll、Pitch、Yaw）在多传感器融合中的权重，表示对IMU的信任程度，越高越信任
 
   # Extrinsics: T_lb (lidar -> imu) 传感器外参的标定矩阵
-  extrinsicTrans: [0.0, 0.0, 0.0]
+  extrinsicTrans: [0.0, 0.0, 0.0]    # 平移矩阵：雷达坐标系 到 ​IMU坐标系 的 ​原点偏移量
   extrinsicRot: [-1, 0, 0,
                   0, 1, 0,
-                  0, 0, -1]
+                  0, 0, -1]          # 旋转矩阵：定义从 ​雷达坐标系 到 ​IMU坐标系 的 ​旋转变换
   extrinsicRPY: [0, -1, 0,
                  1, 0, 0,
-                 0, 0, 1]
+                 0, 0, 1]            # 通过欧拉角旋转矩阵（滚转、俯仰、偏航）描述 ​雷达→IMU 的旋转变换，并以矩阵形式存储和extrinsicRot其实存储的信息一致
   # extrinsicRot: [1, 0, 0,
   #                 0, 1, 0,
   #                 0, 0, 1]
@@ -162,38 +165,38 @@ lio_sam:
   edgeFeatureMinValidNum: 10   # 单帧点云中边缘特征的最小有效数量  ​动态场景​（如行人密集）：增加该值（如 20），确保足够特征点匹配。​低线数雷达​（如16线）：减少该值（如 5），避免频繁丢帧
   surfFeatureMinValidNum: 100  # ​单帧点云中平面特征的最小有效数量  ​大范围场景​（如高速公路）：提高该值（如 150），增强匹配鲁棒性。​狭窄场景​（如走廊）：降低该值（如 50），避免因平面点不足导致匹配失败
 
-  # voxel filter paprams
-  odometrySurfLeafSize: 0.4                     # default: 0.4 - outdoor, 0.2 - indoor
-  mappingCornerLeafSize: 0.2                    # default: 0.2 - outdoor, 0.1 - indoor
+  # voxel filter paprams 值相当于定义体素大小，点云被划分成正方体，值越小越精细
+  odometrySurfLeafSize: 0.4                     # default: 0.4 - outdoor, 0.2 - indoor控制里程计（Odometry）模块中表面（Surf）点云的下采样体素大小。​数值含义：体素边长为 0.4 米，即点云会被划分为 0.4m × 0.4m × 0.4m 的立方体，每个立方体内的点用一个代表点（如重心）替代
+  mappingCornerLeafSize: 0.2                    # default: 0.2 - outdoor, 0.1 - indoor控制建图（Mapping）模块中表面（Surf）点云的下采样体素大小
   mappingSurfLeafSize: 0.4                      # default: 0.4 - outdoor, 0.2 - indoor
 
   # robot motion constraint (in case you are using a 2D robot)
-  z_tollerance: 1000                            # meters
-  rotation_tollerance: 1000                     # radians
+  z_tollerance: 1000                            # meters 控制机器人的两帧之间z轴位移大小，当值为很大时就是完全不限定，为0时强制其在一平面上运动，但当确实有z轴微小偏移却强行设0会引发漂移
+  rotation_tollerance: 1000                     # radians 控制机器人的两帧之间的转动最大角（弧度单位）
 
   # CPU Params
-  numberOfCores: 4                              # number of cores for mapping optimization
-  mappingProcessInterval: 0.15                  # seconds, regulate mapping frequency
+  numberOfCores: 4                              # number of cores for mapping optimization 指定用于建图优化（Mapping Optimization）的CPU核心数为4
+  mappingProcessInterval: 0.15                  # seconds, regulate mapping frequency 建图进程的执行间隔为0.15秒（即每秒约6.6次更新
 
   # Surrounding map
-  surroundingkeyframeAddingDistThreshold: 1.0   # meters, regulate keyframe adding threshold
-  surroundingkeyframeAddingAngleThreshold: 0.2  # radians, regulate keyframe adding threshold
-  surroundingKeyframeDensity: 2.0               # meters, downsample surrounding keyframe poses   
-  surroundingKeyframeSearchRadius: 50.0         # meters, within n meters scan-to-map optimization (when loop closure disabled)
+  surroundingkeyframeAddingDistThreshold: 1.0   # meters, regulate keyframe adding threshold 设置关键帧添加的距离阈值
+  surroundingkeyframeAddingAngleThreshold: 0.2  # radians, regulate keyframe adding threshold 设置关键帧添加的角度阈值
+  surroundingKeyframeDensity: 2.0               # meters, downsample surrounding keyframe poses  控制周围关键帧的下采样密度，越多越准，但cpu负荷更大
+  surroundingKeyframeSearchRadius: 50.0         # meters, within n meters scan-to-map optimization (when loop closure disabled) 设置局部地图优化的搜索半径
 
   # Loop closure
   loopClosureEnableFlag: true
   loopClosureFrequency: 1.0                     # Hz, regulate loop closure constraint add frequency
-  surroundingKeyframeSize: 50                   # submap size (when loop closure enabled)
-  historyKeyframeSearchRadius: 15.0             # meters, key frame that is within n meters from current pose will be considerd for loop closure
-  historyKeyframeSearchTimeDiff: 30.0           # seconds, key frame that is n seconds older will be considered for loop closure
-  historyKeyframeSearchNum: 25                  # number of hostory key frames will be fused into a submap for loop closure
-  historyKeyframeFitnessScore: 0.3              # icp threshold, the smaller the better alignment
+  surroundingKeyframeSize: 50                   # submap size (when loop closure enabled) 定义用于构建局部子地图（Submap）的关键帧数量
+  historyKeyframeSearchRadius: 15.0             # meters, key frame that is within n meters from current pose will be considerd for loop closure 设定搜索历史关键帧的空间半径（狭窄环境要减小，防止误匹配）
+  historyKeyframeSearchTimeDiff: 30.0           # seconds, key frame that is n seconds older will be considered for loop closure 设置历史关键帧的时间差阈值（高速机器人减少，低速增长）
+  historyKeyframeSearchNum: 25                  # number of hostory key frames will be fused into a submap for loop closure 指定融合到子地图中的历史关键帧数量（低的实时性好，高的鲁棒性强）
+  historyKeyframeFitnessScore: 0.3              # icp threshold, the smaller the better alignment 设定ICP（迭代最近点）匹配的误差阈值，数值越小匹配越精准
 
   # Visualization
-  globalMapVisualizationSearchRadius: 1000.0    # meters, global map visualization radius
-  globalMapVisualizationPoseDensity: 10.0       # meters, global map visualization keyframe density
-  globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density
+  globalMapVisualizationSearchRadius: 1000.0    # meters, global map visualization radius 设置全局地图可视化的搜索半径（单位：米），即仅显示机器人当前位姿周围 ​1000 米范围内 的地图数据 大范围建图​（如户外）：保持默认值，确保全局地图完整显示。​实时避障：可缩小范围（如 500.0），减少渲染数据量以提升帧率。
+  globalMapVisualizationPoseDensity: 10.0       # meters, global map visualization keyframe density 高精度调试：设为较小值（如 5.0），显示更多关键帧轨迹细节。​轻量化显示：增大值（如 20.0），减少轨迹点数量以降低GPU负载。
+  globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density 设置全局地图点云的 ​下采样体素尺寸​（单位：米），即每个 1.0×1.0×1.0 米体素内保留一个点 ​降低点云冗余：减少重复点（如墙面、地面），提升渲染效率。​保持特征结构：合理值（如 0.5-2.0）可在降噪与保留几何细节间平衡。
 
 
 
@@ -201,11 +204,11 @@ lio_sam:
 # Navsat (convert GPS coordinates to Cartesian)
 navsat:
   frequency: 50
-  wait_for_datum: false
+  wait_for_datum: false  # 无需等待基准点（Datum），适合动态启动的场景（如车载系统即时定位
   delay: 0.0
-  magnetic_declination_radians: 0
+  magnetic_declination_radians: 0 # 磁偏角补偿
   yaw_offset: 0
-  zero_altitude: true
+  zero_altitude: true  # 将高度值强制置零，适用于平面导航（如室内或忽略高程的2D地图）
   broadcast_utm_transform: false
   broadcast_utm_transform_as_parent_frame: false
   publish_filtered_gps: false
@@ -245,6 +248,33 @@ ekf_gps:
                  false, false, false]
   odom0_differential: false
   odom0_queue_size: 10
+```
+
+## 重点记录2：imu_utils的imu标定包的使用
+### <u>***注意***</u>
+- 笔者很想喷人的是，github上开源的imu_utils包的内容不能过编译，其中的源码有需要修改的部分，笔者自己在原包的基础上进行了二次开发，并封装了docker容器
+
+- 项目地址：https://github.com/njustup70/nagisa_little_kit
+### 包的使用
+- 首先拉取项目
+```bash
+git clone https://github.com/njustup70/nagisa_little_kit.git
+```
+- 配置好docker-compose环境，注意也要提前下载好docker（对docker下载和docker-compose容器管理不太清楚的话可以看看我之前的[帖子](https://tlf-nagisa-blog.com/2025/03/15/docker1/)，这里默认用户已下载好了docker
+```bash
+sudo apt install docker-compose
+```
+- 编译并打开容器
+```bash
+nagisa_little_kit/IMU_init/.devcontainer$ docker-compose up --b && docker-compose up --d
+```
+
+- 进入容器（再开一个终端）
+```bash
+nagisa_little_kit/IMU_init/.devcontainer$ docker exec -it littlekit-comtainer bash
+```
+- 进入容器后，先source（这里牵扯到ROS1的source工作空间覆盖问题，***但是笔者已经解决，按照步骤来，不要做多余步骤，就可以解决这个问题***，ROS开发中的一些小坑会在之后的博客中更新，这里暂时先不说原理了）
+```bash
 
 ```
 ### 附LIO-SAM的[官方论文](https://drive.google.com/file/d/16uXlxT91tk-mtIE-lI0_GFF6qfnseC0k/view)
