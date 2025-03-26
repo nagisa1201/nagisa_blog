@@ -315,7 +315,14 @@ nagisa_little_kit/IMU_init/.devcontainer$ docker exec -it littlekit-comtainer ba
 ```
 - 进入容器后，先source（这里牵扯到ROS1的source工作空间覆盖问题，***但是笔者已经解决，按照步骤来，不要做多余步骤，就可以解决这个问题***，ROS开发中的一些小坑会在之后的博客中更新，这里暂时先不说原理了）
 ```bash
-
+cd ~/packages/ros_manager && source devel/setup.bash # 这步就可以解决source问题
 ```
-### 附LIO-SAM的[官方论文](https://drive.google.com/file/d/16uXlxT91tk-mtIE-lI0_GFF6qfnseC0k/view)
+- 启动标定launch文件
+```bash
+cd ../nagisa_ws && roslaunch my_imu_init A3.launch
+```
+- 随后启动IMU数据包即可，但是注意，***IMU数据包中的IMU话题需要与A3.launch中定义的一样，如果不一样请先在拉取工程后修改为一样（ROS1中的launch和yaml文件修改后不用catkin_make和source）***
+
+# 文末
+- 附LIO-SAM的[官方论文](https://drive.google.com/file/d/16uXlxT91tk-mtIE-lI0_GFF6qfnseC0k/view)
 
