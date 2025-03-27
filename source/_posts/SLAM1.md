@@ -300,7 +300,7 @@ ekf_gps:
 ```bash
 git clone https://github.com/njustup70/nagisa_little_kit.git
 ```
-- 配置好docker-compose环境，注意也要提前下载好docker（对docker下载和docker-compose容器管理不太清楚的话可以看看我之前的[帖子](https://tlf-nagisa-blog.com/2025/03/15/docker1/)，这里默认用户已下载好了docker）
+- 配置好docker-compose环境，注意也要提前下载好docker（对docker下载和docker-compose容器管理不太清楚的话可以看看我之前的[帖子](https://tlf-nagisa-blog.com/2025/03/15/docker1/)，这里默认用户已下载好了docker
 ```bash
 sudo apt install docker-compose
 ```

@@ -65,7 +65,7 @@ Compose 使用的三个步骤：
 sudo apt install docker-compose 
 ```
 
-# 重点解析：Dockerfile和docker-compose.yml文件的语法和文件结构
+# 重点解析：Dockerfile和docker-compose.yml文件的语法和文件结构，运行逻辑
 ## 文件结构
 - 附笔者某github的docker仓库结构
 ```text
@@ -200,11 +200,11 @@ COPY [源路径] [目标路径]
  ```bash
  version: '3' ## 指定 Docker Compose 文件格式版本
 services:
-  lio_sam_container:
+  lio_sam_container: ## 这里是笔者之前没注意到的问题，此处为服务名，一个服务在没有指定下面的container_name时可以启动多个容器，且下面的所有挂载等的设置全部都设置的是一个服务的参数
     build:
       context: .
       dockerfile: Dockerfile ## 指定参与构建的dockerfile文件名
-    image: Nagisa/lio_sam ## 构建出的镜像名
+    image: Nagisa/lio_sam ## 构建出的镜像名，这个是针对dockerfile的
     container_name: lio_sam_container ## 指定构建出的容器名
     environment: ## 环境变量设置
       - DISPLAY=${DISPLAY} ## 允许容器内 GUI 应用显示到宿主机屏幕（需配合 X11 挂载）
@@ -236,3 +236,32 @@ Docker 容器被视为“外部客户端”，即使它运行在本地，也需�
 该命令临时允许所有本地用户连接 X Server（相当于关闭访问控制）。
 未执行此命令时，容器内的 rviz 会被 X Server 拒绝连接，导致报错，挂载宿主机的 X 认证文件（~/.Xauthority）到容器内后彻底解决
 - context: .：必须要这样写的原因，context只能指定一个，即构造目录起始点，与docker的节省缓存构建有关
+
+## 运行逻辑：为什么docker-compose的镜像，服务管理方式具有复用性
+Docker Compose的核心思想就是通过服务（service），将镜像构建（images），运行配置和资源管理统一封装（volumes，environment），使其成为可复用的模板
+
+### Docker Compose 的核心逻辑
+
+​服务（Service）​ 是一个 ​容器模板，它定义了：
+- ​如何构建镜像​（通过 build + Dockerfile）
+- ​如何运行容器​（通过 image、volumes、environment 等配置项
+- ​容器（Container）​ 是服务的​实例化对象，一个服务可以启动多个容器
+​
+### 服务如何复用
+#### ​镜像复用
+- 如果服务中指定了 build，Docker Compose 会根据 Dockerfile ​生成镜像，并保存到本地（默认名称为 <project>_<service_name>，或通过 image 字段自定义名称）
+- 该镜像可以被其他服务或其他项目复用
+```yaml
+# 复用已存在的镜像（无需重新构建）
+services:
+  another_service:
+    image: Nagisa/lio_sam  # 直接使用已构建的镜像
+    volumes: ...
+```
+#### ​配置复用
+- 服务的所有配置项（如 volumes、environment、network）都定义在服务块内，​每次启动容器时都会应用这些配置
+
+可以通过以下方式复用服务配置：
+- ​横向扩展：使用 docker-compose up --scale service_name=N 启动多个容器实例 
+
+- ​继承扩展：使用 extends 关键字继承其他服务的配置（需在 Compose 文件中定义）
