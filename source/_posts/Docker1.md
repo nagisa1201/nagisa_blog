@@ -249,7 +249,7 @@ Docker Compose的核心思想就是通过服务（service），将镜像构建�
 ​
 ### 服务如何复用
 #### ​镜像复用
-- 如果服务中指定了 build，Docker Compose 会根据 Dockerfile ​生成镜像，并保存到本地（默认名称为 <project>_<service_name>，或通过 image 字段自定义名称）
+- 如果服务中指定了 build，Docker Compose 会根据 Dockerfile ​生成镜像，并保存到本地（默认名称为 `<project>_<service_name>`，或通过 image 字段自定义名称）
 - 该镜像可以被其他服务或其他项目复用
 ```yaml
 # 复用已存在的镜像（无需重新构建）
