@@ -10,7 +10,7 @@ date: 2025-03-28
   Navigation2开发心得
 </div>
 
-```text
+```yaml
 bt_navigator:
   ros__parameters:
     use_sim_time: True  # 使用Gazebo等仿真器的时间而非系统时间
