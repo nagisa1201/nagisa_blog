@@ -6,7 +6,7 @@ tags: [树洞]
 date: 2025-04-24
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
-<h1>人一生，为了什么呢</h1>
+  人一生，为了什么呢
 </div>
 
 也许，人生没那么多必须。
