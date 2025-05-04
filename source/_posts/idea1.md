@@ -5,7 +5,7 @@ categories:
 tags: [树洞]
 date: 2025-04-24
 ---
-<div align="center">
+<div align="center" style="font-size: 36px; font-weight: 800;">
 <h1>人一生，为了什么呢</h1>
 </div>
 
