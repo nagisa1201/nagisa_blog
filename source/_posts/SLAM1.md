@@ -18,7 +18,7 @@ date: 2025-03-19
 
 - 可能有的开发者想问SLAM已经自带了同时建图与定位功能，为什么还要将建图和定位隔开进行开发。笔者在单跑LIO-SAM时发现过其轨迹与实际录取数据包时的误差，有时甚至会平地起飞（漂移）
 
-- 为了解决这一问题，笔者尝试了隔离建图定位，进行imu内参标定的尝试，将其记录下来(~~其实就是臭掉包工程师~~)
+- 为了解决这一问题，笔者尝试了隔离建图定位，进行imu内参标定的尝试，将其记录下来(~~其实就是臭调包工程师~~)
 
 # 基础知识扫盲
 首先，我们要了解一下SLAM和传感器的有关术语
@@ -103,7 +103,7 @@ date: 2025-03-19
 这也是困扰了笔者很久很久的调参环节，想要看懂yaml文件里的参数，要去回查源码和了解SLAM的部分运行原理是最好，包括算法的模块设计思路
 ### 参数详解
 - 笔者整理了大部分的lio-sam的yaml中的参数含义并添加了大段注释，知道了参数含义，才能做出正确尝试性的改参，详细看下文注释
-```bash
+```yaml
 lio_sam:
 
   # Topics
@@ -322,6 +322,23 @@ cd ~/packages/ros_manager && source devel/setup.bash # 这步就可以解决sour
 cd ../nagisa_ws && roslaunch my_imu_init A3.launch
 ```
 - 随后启动IMU数据包即可，但是注意，***IMU数据包中的IMU话题需要与A3.launch中定义的一样，如果不一样请先在拉取工程后修改为一样（ROS1中的launch和yaml文件修改后不用catkin_make和source）***
+
+- 以下为my_imu_init/launch/A3.launch的内容。***不要直接复制这段launch,仅用于了解launch传参使用，请在实际文件里修改***
+```bash
+<launch>
+    <node pkg="imu_utils" type="imu_an" name="imu_an" output="screen">
+        <param name="imu_topic" type="string" value= "/imu"/> # 此处为imu的数据话题，一定要和数据包或者实际imu发布的话题一致
+        <param name="imu_name" type="string" value= "Mid360_imu"/>
+        # 此处为给imu的自定义命名，会在最后标定完成的文件名中体现
+        <param name="data_save_path" type="string" value= "$(find my_imu_init)/data/"/>
+        # 标定文件保存路径
+        <param name="max_time_min" type="int" value= "40"/>
+        # 标定数据包的最短采集时间，单位为分钟，建议1h以上，且一定要短于自己实际的采集时间
+        <param name="max_cluster" type="int" value= "100"/>
+        # 不重要
+    </node>
+</launch>
+```
 
 # 文末
 - 附LIO-SAM的[官方论文](https://drive.google.com/file/d/16uXlxT91tk-mtIE-lI0_GFF6qfnseC0k/view)
