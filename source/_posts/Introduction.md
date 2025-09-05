@@ -8,6 +8,7 @@ date: 2025-09-05
 <div align="center" style="font-size: 36px; font-weight: 800;">
     你会发现一个有趣的我
 </div>
+
 <div align="center">
 
   <!-- dynamic typing effect 动态打字效果 -->
