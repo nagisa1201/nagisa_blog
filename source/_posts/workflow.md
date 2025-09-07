@@ -117,3 +117,9 @@ export ROS_LOCALHOST_ONLY=1 # 在本个终端中执行
 echo 'export ROS_LOCALHOST_ONLY=1' >> ~/.bashrc # 永久写入，每次进入终端自动执行
 ```
 ## [ROS1与ROS2桥接通信](https://github.com/TommyChangUMD/ros-humble-ros1-bridge-builder)
+- ROS1与ROS2的通信需要使用桥接包**ros1_bridge**，该桥接包允许在ROS1和ROS2之间传递消息。
+- 由于该桥接包本质还是使用的ROS2的通信机制，因此需要确保**ROS2容器与主机的通信正确方式**，即上述的三点
+- 具体的安装方式请详见[该仓库readme](https://github.com/TommyChangUMD/ros-humble-ros1-bridge-builder)，该仓库采用的是***镜像编译产生install包***，可以直接使用编译后的**install包进行桥接**
+- 编译后的包文件如下
+![](../blog-img/workflow/image11.png)
+- 其本质是一个挂载在ROS2容器中的桥接节点，**强烈推荐你读完readme复现后**写一个.bash/sh文件将readme教你在包构建之后的流程打包成一个脚本文件一键执行。挂在后台即可进行**Humble和Noetic的桥接**（根据去年的使用经验不一定非得是这两个版本，但是作者是这样写的）
