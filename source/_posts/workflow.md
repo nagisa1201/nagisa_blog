@@ -123,3 +123,25 @@ echo 'export ROS_LOCALHOST_ONLY=1' >> ~/.bashrc # 永久写入，每次进入终
 - 编译后的包文件如下
 ![](../blog-img/workflow/image11.png)
 - 其本质是一个挂载在ROS2容器中的桥接节点，**强烈推荐你读完readme复现后**写一个.bash/sh文件将readme教你在包构建之后的流程打包成一个脚本文件一键执行。挂在后台即可进行**Humble和Noetic的桥接**（根据去年的使用经验不一定非得是这两个版本，但是作者是这样写的）
+
+# [foxglove](https://foxglove.dev/download)+数据包开发流
+- foxglove是一个**开源的机器人数据可视化工具，多数时间是rviz的更优选择**，支持ROS1和ROS2，可以用来可视化机器人传感器数据、状态信息等。
+- foxglove也是简单的**采用deb的安装方式**，安装后即可使用。
+- foxglove支持**图表、3D视图、多数据查看**等[功能](https://docs.foxglove.dev/docs)，这个只能说对比rviz来说，谁用谁知道
+- 但是foxglove采用的是websocket的通信方式，因此**foxglove与ROS1/ROS2的通信需要一个中间节点**，这个中间节点**foxglove-bridge**。***注意***，**即使在容器中同理**，也是只用开启这个中间节点，**宿主机/其他容器中运行的foxglove即可进行通信**
+```bash
+sudo apt install ros-$ROS_DISTRO-foxglove-bridge
+ros2 launch foxglove_bridge foxglove_bridge_launch.xml
+```
+- 该节点会在默认端口8765开启一个websocket服务器，foxglove**通过该端口与ROS1/ROS2进行通信**
+
+- 随后点击打开链接，在**WebSocket栏**输入`ws://localhost:8765`即可连接
+![](../blog-img/workflow/image12.png)
+
+## 数据包
+- 数据包是ROS1和ROS2中用于存储和共享话题及其数据的文件，在ROS1中，数据包通常以`.bag`为后缀名，在ROS2中，数据包以`.db3`为后缀名。
+
+- 数据包可以作为记录，记录比如比赛时的**各个话题的传感器数据**，回放时可以将之前记录的数据包**重新发布到相应的话题上**，可以方便的进行调试程序和查错。
+
+## foxglove使用数据包
+- foxglove可以直接打开数据包进行可视化，只需要**打开文件，选择对应的bag/db3文件即可**，等待数据包加在完成就可以和看视频一样拖动回放
