@@ -4,7 +4,7 @@ categories:
   - 技术
   - 工作流
 tags: [技术博文,开发建议]
-date: 2025-09-01
+date: 2025-09-07
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
   工作流介绍（算法组第六课）
