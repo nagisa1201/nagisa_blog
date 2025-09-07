@@ -81,7 +81,7 @@ sudo update-alternatives --config x-terminal-emulator
 - 笔者在进行ROS1不同版本通信时，只需要其中一个ROS1容器开启roscore，其他ROS1容器就可以直接接收到另一个ROS1容器发布的话题。
 ![](../blog-img/workflow/image3.png)
 
-## 当为多机ROS1通信时（不重要，且不常用,故略讲）
+## 当为多机ROS1通信时（不重要，且不常用，故略讲）
 - 同样允许不同版本的ROS1通信，但是需要配置**ROS_MASTER_URI**和**ROS_HOSTNAME**，虽说是**主机从机的概念，但是其实是双向通信**（细则可以看这篇[帖子](https://www.cnblogs.com/binbin2002/p/18732070)）
 ![](../blog-img/workflow/image4.png)
 
