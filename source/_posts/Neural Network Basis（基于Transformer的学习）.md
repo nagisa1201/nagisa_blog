@@ -115,7 +115,7 @@ date: 2025-09-21
 #反向传播 #卷积层
 ## CNN：卷积神经网络![](/blog-img/Transformer_attachment/a31ec328fe7b280fccb62709e6e29ded.png)
 ### CNN出现要解决的问题——全连接网络的弊端![](/blog-img/Transformer_attachment/139385cced3e3a56dc94a3bc9c9a0c4b.png)
-- **参数爆多、训练数据量大，且极容易过拟合
+- **参数爆多、训练数据量大，且极容易过拟合**
 - **每个节点都与下一层的所有节点相连，极其冗余**
 ### 重点：卷积核，卷积核的本质是一种过滤器，可以是任何情况![](/blog-img/Transformer_attachment/aaf480ddf3601d05b15554053a8996c8.png)
 通过卷积核遍历提取的方法，***在保证提取同一张图片的卷积核不变情况下，把一张图片的特征提取到Feature Map中，且将所需学习的参数大幅度的减小（即卷积核内的所有参数）***
