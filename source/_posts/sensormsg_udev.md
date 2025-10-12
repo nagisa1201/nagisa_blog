@@ -1,5 +1,5 @@
 ---
-title: ROS中常见传感器消息及设Linux的设备管理
+title: ROS中常见传感器消息和Linux的设备管理
 categories: 
   - 技术
   - SLAM
@@ -8,7 +8,7 @@ tags: [技术博文,开发建议]
 date: 2025-10-12
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
-  ROS中常见传感器消息及设Linux的设备管理
+  ROS中常见传感器消息和Linux的设备管理
 </div>
 
 # [ROS中常见传感器消息——SensorMsg](https://docs.ros.org/en/noetic/api/sensor_msgs/html/index-msg.html)
