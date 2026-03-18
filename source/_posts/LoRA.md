@@ -2,8 +2,8 @@
  * @Author: Nagisa 2964793117@qq.com
  * @Date: 2026-03-15 19:58:44
  * @LastEditors: Nagisa 2964793117@qq.com
- * @LastEditTime: 2026-03-18 14:46:56
- * @FilePath: \nagisa_blog\source\_posts\CoT.md
+ * @LastEditTime: 2026-03-18 15:01:15
+ * @FilePath: \nagisa_blog\source\_posts\LoRA.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 ---
