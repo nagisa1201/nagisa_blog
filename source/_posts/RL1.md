@@ -6,10 +6,13 @@ categories:
 tags: [强化学习, 数学原理]
 date: 2026-06-28
 ---
+<div align="center" style="font-size: 36px; font-weight: 800;">
+  强化学习Chapter1——基本概念
+</div>
 
 **强化学习**（Reinforcement Learning, RL）是一种机器学习方法，它通过与环境的交互来学习最优策略，以最大化累积奖励。强化学习的核心思想是智能体（Agent）在环境（Environment）中采取行动（Action），根据环境的反馈（Reward）调整其行为，从而逐步优化其策略（Policy）。
 
-## 强化学习基本概念
+# 强化学习基本概念
 
 - **State（状态）**：agent 有关的环境的状态（status）。
   - **State space（状态空间）**：所有可能的状态的集合。
@@ -40,11 +43,11 @@ date: 2026-06-28
     - **Option 1**：将 **absorbing state 的 reward 设置为 0**，进入该状态后始终停留在其中并获得 0 奖励（相当于将 episode 无限延续下去）。
     - **Option 2**：将 **terminal state 视作一个普通状态**，并且假设在该状态下存在一个较好的策略可以继续收集 reward。
 
-## MDP（Markov Decision Process，马尔可夫决策过程）
+# MDP（Markov Decision Process，马尔可夫决策过程）
 
 强化学习通常使用马尔可夫决策过程（Markov Decision Process, MDP）来建模。MDP 是一个数学框架，用于描述具有随机性和决策性的环境。
 
-### MDP 要素（Sets）
+## MDP 要素（Sets）
 
 - **状态集**（State Space, $\mathcal{S}$）：所有可能状态的集合。
 - **动作集**（Action Space, $\mathcal{A}(s)$）：在状态 $s$ 下所有可能动作的集合。
@@ -54,7 +57,7 @@ date: 2026-06-28
 - **策略**（Policy, $\pi(a|s)$）：在状态 $s$ 下采取动作 $a$ 的概率分布。
 - **当 Policy 确定时，Markov Decision Process 退化为一个 Markov Process**（此时 "Decision" 消失，因为动作选择已无不确定性）。
 
-### Markov Property（马尔可夫性质）
+## Markov Property（马尔可夫性质）
 
 **马尔可夫性质**是指系统的未来状态仅依赖于当前状态和当前动作，而与过去的状态和动作无关：
 
