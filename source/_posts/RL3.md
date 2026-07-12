@@ -25,7 +25,7 @@ date: 2026-07-04
 - 对于最优策略$\pi^\ast$，我们希望在每个状态$s$下，选择一个动作$a$，使得期望回报最大化。因此，我们可以将Bellman Equation中的策略$\pi$替换为最优策略$\pi^\ast$，并引入最大化操作：
 $$
 \begin{aligned}
-v(s) &= \max_{\pi} \sum_{a} \pi(a|s) \left( \sum_{r} p(r|s, a)r + \gamma \sum_{s'} p(s'|s, a)v(s') \right), \quad \forall s \in \mathcal{S} \\
+v(s) &= \max_{\pi} \sum_{a} \pi(a|s) \left( \sum_{r} p(r|s, a)r + \gamma \sum_{s'} p(s'|s, a)v(s') \right), \quad \forall s \in \mathcal{S} \\\\
 &= \max_{\pi} \sum_{a} \pi(a|s) q(s, a) \quad s \in \mathcal{S}
 \end{aligned}
 $$
@@ -37,7 +37,7 @@ $$\mathbf{v} = \max_{\pi} \left( \mathbf{r} + \gamma \mathbf{P} \mathbf{v} \righ
 $$\max_{\pi} \sum_{a} \pi(a|s) q(s, a) \quad s \in \mathcal{S}$$
 - 考虑到
   - $\sum_{a} \pi(a|s) = 1$
-  - 我们可以得到$$\max_{\pi} \sum_{a} \pi(a|s) q(s, a) = \max_{a \in \mathcal{A}(s)} q(s, a)$$此时最优的目标被达到当$$\pi^\ast(a|s) = \begin{cases} 1, & a = \arg\max_{a' \in \mathcal{A}(s)} q(s, a') \\ 0, & \text{otherwise} \end{cases}$$
+  - 我们可以得到$$\max_{\pi} \sum_{a} \pi(a|s) q(s, a) = \max_{a \in \mathcal{A}(s)} q(s, a)$$此时最优的目标被达到当$$\pi^\ast(a|s) = \begin{cases} 1, & a = \arg\max_{a' \in \mathcal{A}(s)} q(s, a') \\\\ 0, & \text{otherwise} \end{cases}$$
 - 我们将BOE的形式写为函数形式：
 $$f(v) := \max_{\pi} \left( \mathbf{r} + \gamma \mathbf{P} \mathbf{v} \right)$$
   - **所以我们只需要求解**$$v = f(v)$$
