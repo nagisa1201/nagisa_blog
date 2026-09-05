@@ -42,7 +42,8 @@ $$\max_{\pi} \sum_{a} \pi(a|s) q(s, a) \quad s \in \mathcal{S}$$
 - 我们将BOE的形式写为函数形式：
 $$f(v) := \max_{\pi} \left( \mathbf{r} + \gamma \mathbf{P} \mathbf{v} \right)$$
   - **所以我们只需要求解**$$v = f(v)$$
-  对应单个状态$s$的形式为$$[f(v)]_s := \max_{\pi} \sum_{a} \pi(a|s) q(s, a)$$
+  - 对应单个状态$s$的形式为 
+$${f(v)}_s := \max_{\pi} \sum_{a} \pi(a|s) q(s, a)$$
 
 ## Contractive Mapping（收缩映射）：求解Bellman Optimality Equation的核心数学工具
 不动点与收缩映射的定义如下：
