@@ -5,6 +5,7 @@ categories:
   - 技术
 tags: [强化学习, 数学原理]
 date: 2026-07-04
+mathjax: true
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
   强化学习Chapter3——贝尔曼最优

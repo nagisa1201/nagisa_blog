@@ -20,7 +20,7 @@ date: 2026-06-28
   - **Action space（动作空间）**：所有可能的动作的集合。action 依赖于 state，对于不同的 state，action space 可能不同。
 - **Policy（策略）**：agent 在一个 State 下采用何种 Action 的规则。
   - **Deterministic policy（确定性策略）**：在给定状态下，策略总是选择相同的动作，即某项动作被选择的概率为 1，其余动作概率为 0。
-  $$\pi(a|s) = P(A_t = a \mid S_t = s) = \begin{cases} 1, & \text{if } a = \mu(s) \\ 0, & \text{if } a \neq \mu(s) \end{cases}$$
+  $$\pi(a|s) = P(A_t = a \mid S_t = s) = \begin{cases} 1, & \text{if } a = \mu(s) \\\\ 0, & \text{if } a \neq \mu(s) \end{cases}$$
   - **Stochastic policy（随机策略）**：在给定状态下，策略以一定概率分布选择不同的动作。
   $$\pi(a|s) = P(A_t = a \mid S_t = s)$$
   - 策略（无论确定还是随机）作为概率分布，满足以下公理：

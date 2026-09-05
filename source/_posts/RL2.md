@@ -5,6 +5,7 @@ categories:
   - 技术
 tags: [强化学习, 数学原理]
 date: 2026-06-28
+mathjax: true
 ---
 <div align="center" style="font-size: 36px; font-weight: 800;">
   强化学习Chapter2——贝尔曼公式
@@ -77,7 +78,7 @@ $$\begin{aligned} \mathbb{E}[R&#95;{t+1} \mid S&#95;t = s] &= \sum&#95;{a} \pi(a
   - This is the mean of **immediate rewards**，体现了在状态 $s$ 下，按照策略 $\pi$ 采取动作后的**即时奖励**
 
 - **Next, calculate the second term** $\mathbb{E}[G&#95;{t+1} \mid S&#95;t = s]$
-$$\begin{aligned} \mathbb{E}[G&#95;{t+1} \mid S&#95;t = s] &= \sum&#95;{s'} \mathbb{E}[G&#95;{t+1} \mid S&#95;t = s, S&#95;{t+1} = s'] \, p(s'|s) \\\\ &= \sum&#95;{s'} \mathbb{E}[G&#95;{t+1} \mid S&#95;{t+1} = s'] \, p(s'|s) \\\\ &= \sum&#95;{s'} v&#95;{\pi}(s') \, p(s'|s) \\\\ &= \sum&#95;{s'} v&#95;{\pi}(s') \sum&#95;{a} p(s'|s, a) \pi(a|s) \end{aligned}$$
+$$\begin{aligned} \mathbb{E}[G&#95;{t+1} \mid S&#95;t = s] &= \sum&#95;{s'} \mathbb{E}[G&#95;{t+1} \mid S&#95;t = s, S&#95;{t+1} = s'] p(s'|s) \\\\ &= \sum&#95;{s'} \mathbb{E}[G&#95;{t+1} \mid S&#95;{t+1} = s']  p(s'|s) \\\\ &= \sum&#95;{s'} v&#95;{\pi}(s')  p(s'|s) \\\\ &= \sum&#95;{s'} v&#95;{\pi}(s') \sum&#95;{a} p(s'|s, a) \pi(a|s) \end{aligned}$$
   - This is the mean of **future rewards**，体现了在状态 $s$ 下，按照策略 $\pi$ 采取动作后，未来所有奖励的折扣累积和的期望值。
     - note that：第一步到第二步依据 **Markov Property**，即未来状态只依赖于当前状态和当前动作，而与过去的状态和动作无关——在已知下一状态为 $s'$ 的情况下，$S&#95;t$ 对 $G&#95;{t+1}$ 没有额外信息。
 
@@ -100,11 +101,11 @@ $$\begin{aligned} v&#95;\pi(s) &= \mathbb{E}[R&#95;{t+1} \mid S&#95;t = s] + \ga
   - ①式代表我从状态 $s$ 出发，按照策略 $\pi$ 采取动作后，环境给出的即时奖励的期望值。
   - ②式代表从状态 $s$ 出发，按照策略 $\pi$ 采取动作后，转移到下一状态 $s'$ 的概率。
 $$v&#95;\pi(s) = \sum&#95;a \pi(a|s) \left[ \sum&#95;r p(r|s, a) r + \gamma \sum&#95;{s'} p(s'|s, a) v&#95;\pi(s') \right]$$
-$$v&#95;\pi(s) = r&#95;\pi(s) + \gamma \sum&#95;{s'} \mathbf{p}&#95;\pi(s, s') \, v&#95;\pi(s')$$
+$$v&#95;\pi(s) = r&#95;\pi(s) + \gamma \sum&#95;{s'} \mathbf{p}&#95;\pi(s, s') v&#95;\pi(s')$$
 
 $$r&#95;\pi(s) = \sum&#95;a \pi(a|s) \sum&#95;r p(r|s, a) r \qquad ①$$
 
-$$\mathbf{p}&#95;\pi(s, s') = \sum&#95;a \pi(a|s) \, p(s'|s, a) \qquad ②$$
+$$\mathbf{p}&#95;\pi(s, s') = \sum&#95;a \pi(a|s) p(s'|s, a) \qquad ②$$
 
 - 所以，对于所有状态 $s \in \mathcal{S}$，我们可以将 Bellman Equation 写成矩阵形式：
 $$\mathbf{v}&#95;\pi = \mathbf{r}&#95;\pi + \gamma \mathbf{P}&#95;\pi \mathbf{v}&#95;\pi$$
@@ -113,7 +114,8 @@ $$\mathbf{v}&#95;\pi = \mathbf{r}&#95;\pi + \gamma \mathbf{P}&#95;\pi \mathbf{v}
   - $\mathbf{P}&#95;\pi$ 是一个 $n \times n$ 的状态转移概率矩阵。
 
 - 以一个题目作为例子：
-![](/blog-img/RL2/image.png)
+
+![Bellman公式例题](/blog-img/RL2/image.png)
 
 # 求解 State Value
 
@@ -139,8 +141,8 @@ $$q&#95;\pi(s, a) = \mathbb{E}&#95;\pi[G&#95;t \mid S&#95;t = s, A&#95;t = a]$$
   - 当前动作 $a$，即 agent 在当前状态下采取的动作；
   - 策略 $\pi$，即 agent 在当前状态下采取动作的概率分布。
 - action value 与 state value 的联系：
-$$\underbrace{\mathbb{E}[G&#95;t \mid S&#95;t = s]}&#95;{v&#95;\pi(s)} = \sum&#95;{a} \underbrace{\mathbb{E}[G&#95;t \mid S&#95;t = s, A&#95;t = a]}&#95;{q&#95;\pi(s,a)} \, \pi(a|s) \qquad ③$$
+$$\underbrace{\mathbb{E}[G&#95;t \mid S&#95;t = s]}&#95;{v&#95;\pi(s)} = \sum&#95;{a} \underbrace{\mathbb{E}[G&#95;t \mid S&#95;t = s, A&#95;t = a]}&#95;{q&#95;\pi(s,a)}  \pi(a|s) \qquad ③$$
   - namely：
-$${\color{red}v&#95;\pi(s)} = \sum&#95;{a} \pi(a|s) \, {\color{red}q&#95;\pi(s,a)}$$
+$${\color{red}v&#95;\pi(s)} = \sum&#95;{a} \pi(a|s)  {\color{red}q&#95;\pi(s,a)}$$
   - 将 $v&#95;\pi(s)$ 的结果式代入③式可得：
-$${\color{red}q&#95;\pi(s, a)} = \sum&#95;{r} p(r|s, a) r + \gamma \sum&#95;{s'} p(s'|s, a) \, {\color{red}v&#95;\pi(s')}$$
+$${\color{red}q&#95;\pi(s, a)} = \sum&#95;{r} p(r|s, a) r + \gamma \sum&#95;{s'} p(s'|s, a)  {\color{red}v&#95;\pi(s')}$$
